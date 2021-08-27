@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace MVC01.Control
 {
-   public static class Controller2
+    public static class Controller2
     {
-        public static List<string[]> SelectAll( string table)
+        public static List<string[]> SelectAll(string table)
         {
             if (!string.IsNullOrEmpty(table))
             {
@@ -42,6 +42,40 @@ namespace MVC01.Control
             {
                 return false;
             }
+        }
+        public static double AtualizaSaida(string placa, string horaSaida, bool lavou)
+        {
+            if (string.IsNullOrEmpty(placa) && string.IsNullOrEmpty(horaSaida))
+            {
+                List<string> horaE = DBFunction.GenericUnitSelect("HoraEntrada", "Estacionamento", $"Placa = '{placa}'");
+                double horaEntrada = -1;
+                foreach (var item in horaE)
+                {
+                    horaEntrada = Convert.ToDouble(item);
+                }
+                if (horaEntrada == -1)
+                {
+                    //devolve -1 para saber view que não deu certo
+                    return horaEntrada;
+                }
+                else
+                {
+                    //calcula o valor
+                    double valorFinal = (Convert.ToDouble(horaSaida) - horaEntrada) * 3.5;
+                    if (lavou)
+                    {
+                        valorFinal += 60;
+                    }
+                    EstacionamentoDB.AtualizaSaida(placa);
+                    return valorFinal;
+                }
+            }
+            else
+            {
+                return -2;
+            }
+
+
         }
     }
 }

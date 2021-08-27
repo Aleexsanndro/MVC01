@@ -18,6 +18,12 @@ namespace MVC01.Model
             DBFunction.GenericExecute(update);
             return true;
         }
+        public static bool AtualizaSaida(string placa)
+        {
+            string update = $"UPDATE dbo.Estacionamento Set Placa = null, HoraEntrada = 0 WHERE Placa = '{placa}'";
+            DBFunction.GenericExecute(update);
+            return true;
+        }
 
     }
 }
